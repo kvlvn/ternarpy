@@ -45,7 +45,7 @@ from matplotlib import pylab
 from ternarpy import *
 import pandas as pd
 
-df = pd.read_table("bars.txt")
+df = pd.read_table("Example/bars.txt")
 # convert the grams of each to calories from each (4, 4, 9: C, P, F)
 df["Carb Cals"] = df["Carbs Per Serving"]*4
 df["Protein Cals"] = df["Protein Per Serving"]*4
@@ -66,6 +66,7 @@ points = ax.scatter(Xt[:,0],Xt[:,1],s=df["Total Cals Per Dollar"]*2,alpha=0.3);
 All of the plot commands for shading with patches will work find with this library. The only thing you need to do different is make sure to transform all your patch or data points into the ternary coordinates first. Here is a small example:
 
 ```python
+# using the same code as above to start...
 fig, ax = pylab.subplots(figsize=(10,10))
 setup_plot(ax, side_labels=["Carb Cals","Protein Cals","Fat Cals"], grid_values=np.arange(0.1,1,0.1))
 points = ax.scatter(Xt[:,0],Xt[:,1],s=df["Total Cals Per Dollar"]*2,alpha=0.3);
