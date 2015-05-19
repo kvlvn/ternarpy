@@ -1,6 +1,8 @@
 # ternarpy
 Functions to help create ternary plots in matplotlib.
 
+Based on this stackoverflow answer: http://stackoverflow.com/questions/701429/library-tool-for-drawing-ternary-triangle-plots/6076050#6076050
+
 ####Functions
 
 #####make_basis()  
