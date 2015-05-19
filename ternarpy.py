@@ -68,8 +68,9 @@ def setup_plot(ax, side_labels=None, grid_values=None, **kwargs):
 	tick_offset = kwargs.get('tick_offset',0.2)
 	label_args = {'ha':'center','va':'center','fontsize':16}
 	label_args.update(kwargs.get('label_args',{}))
-	tick_args = {'ha':'center','va':'center','fontsize':12}
+	tick_args = {'fontsize':12}
 	tick_args.update(kwargs.get('tick_args',{}))
+	tick_rotations = [0, -60, 60]
 	# plot the text first 
 	basis_pts = np.vstack((basis,basis[0,:]))
 	for i,l in enumerate(side_labels):
@@ -84,26 +85,29 @@ def setup_plot(ax, side_labels=None, grid_values=None, **kwargs):
 			angle = np.mod(angle + 180,360)
 		ax.text(x*(1 + label_offset), y*(1 + label_offset), l, rotation=angle, **label_args)
 		if True:
-			y_label_offset = -1*tick_offset if i == 1 else 0
-			x_label_offset = -1*tick_offset if i == 0 else (0 if i == 1 else tick_offset)
-			y_label_offset*=0.2
-			x_label_offset*=0.2
+			ha = "right" if i == 0 else "left"
+			va = "center" if i == 0 else ("top" if i == 1 else "bottom")
 			for d in grid_values:
-				x = (a[0]-b[0])*d + b[0]
+				x = (a[0]-b[0])*d + b[0] - (.02 if i == 0 else 0)
 				y = (a[1]-b[1])*d + b[1]
-				ax.text(x + x_label_offset,y + y_label_offset,"%.1f"%d,**tick_args)
+				s = "%.2f"%d if i == 0 else " %.1f"%d
+				ax.text(x,y,s,rotation=tick_rotations[i],ha=ha,va=va,**tick_args)
 	# plot the edges
 	edge_args = {'c':'red','lw':2,'linestyle':'-'}
 	edge_args.update(kwargs.get('edge_args',{}))
 	for i in range(3):
 		ax.plot([basis_pts[i][0],basis_pts[i+1][0]],[basis_pts[i][1],basis_pts[i+1][1]],**edge_args)
 	# plot grid
-	grid_args = {'c':'black','lw':0.5,'linestyle':'-'}
+	grid_args = {'c':'black','lw':0.5}
 	grid_args.update(kwargs.get('grid_args',{}))
 	val_cycle = cycle(grid_values)
+	linestyles = ['-','--','-.']
+	n_grid = len(grid_values)*1.0
 	for i in range(0,len(pts_tr),2):
+		gn = int(np.floor((i/2)/n_grid))
 		xs = [pts_tr[i][0],pts_tr[i+1][0]]
 		ys = [pts_tr[i][1],pts_tr[i+1][1]]
+		grid_args['linestyle'] = linestyles[gn]
 		ax.plot(xs,ys,**grid_args)
 		
 	# Clear normal matplotlib axes graphics.
